@@ -135,7 +135,7 @@ func HandleCallback(w http.ResponseWriter, r *http.Request) {
 		Path:     "/",
 		Expires:  time.Now().Add(30 * 24 * time.Hour), // 30 days expiry
 		HttpOnly: true,                                // Crucial for security
-		Secure:   true,                                // Crucial for production (HTTPS only)
+		Secure:   false,                               // Crucial for production (HTTPS only)
 		SameSite: http.SameSiteLaxMode,                // Helps mitigate CSRF
 	})
 
@@ -212,7 +212,7 @@ func HandleRefresh(w http.ResponseWriter, r *http.Request) {
 			Path:     "/",
 			Expires:  time.Now().Add(30 * 24 * time.Hour),
 			HttpOnly: true,
-			Secure:   true,
+			Secure:   false,
 			SameSite: http.SameSiteLaxMode,
 		})
 	}
