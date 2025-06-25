@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { onBeforeMount } from 'vue';
+import { getAccessToken } from './scripts/auth';
+
+
+onBeforeMount(async () => { await getAccessToken()})
 </script>
 
 <template>

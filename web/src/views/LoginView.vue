@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { login } from '@/scripts/auth';
+import { login, refreshAccessToken } from '@/scripts/auth';
 
 
 
@@ -10,5 +10,6 @@ import { login } from '@/scripts/auth';
     <div>To access this application you need to login</div>
     <div>Sorry for the inconvenience :D</div>
     <div @click="() => login()">Login</div>
+    <div @click="() => refreshAccessToken()">Refresh</div>
   </div>
 </template>

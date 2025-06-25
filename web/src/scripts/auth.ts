@@ -1,7 +1,11 @@
 import axios from "axios";
 import { generateCodeChallenge, generateRandomString } from "./pkce";
+import { userStore } from "@/stores/user";
+import { useRouter } from "vue-router";
 
 export async function login() {
+  if(await refreshAccessToken()) return
+
   const verifier = generateRandomString(128)
   const challenge = await generateCodeChallenge(verifier)
   const state = generateRandomString(16)
@@ -37,4 +41,35 @@ export async function login() {
 export async function logout() {
   localStorage.removeItem('verifier')
   window.history.replaceState({}, document.title, window.location.pathname)
+}
+
+export async function getAccessToken() {
+  const params = new URLSearchParams(window.location.search)
+  const state = params.get('state')
+  const user = userStore()
+  const router = useRouter()
+
+  if (!state || user.isLoggedIn) {
+    return
+  }
+
+  try {
+    const res = await axios.get<{ access_token: string }>(`${import.meta.env.VITE_APP_BACKEND_URL}/token?state=${state}`)
+    user.setToken(res.data.access_token)
+    router.replace("/")
+  } catch {
+    throw Error("Unable to get access token")
+  }
+}
+
+export async function refreshAccessToken(): Promise<boolean> {
+  const user = userStore()
+  try {
+    const res = await axios.post<{ access_token: string, expires_in: number}>(`${import.meta.env.VITE_APP_BACKEND_URL}/refresh`, {}, { withCredentials: true})
+    user.setToken(res.data.access_token)
+  } catch (err) {
+    return false
+  }
+
+  return true
 }
