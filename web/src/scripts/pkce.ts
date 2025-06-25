@@ -1,4 +1,4 @@
-export function generateCodeVerifier(length: number): string {
+export function generateRandomString(length: number): string {
   let text = ''
   let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 

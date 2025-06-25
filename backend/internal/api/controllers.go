@@ -8,8 +8,11 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"sync"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 type SpotifyAuthRes struct {
@@ -28,6 +31,17 @@ var (
 	verifiers = sync.Map{}
 	tokens    = sync.Map{}
 )
+
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+
+	client = os.Getenv("SPOTIFY_CLIENT_ID")
+	spotifyRedirect = os.Getenv("SPOTIFY_REDIRECT_URL")
+	frontendRedirect = os.Getenv("FRONTEND_REDIRECT_URL")
+}
 
 func HandleSession(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -50,7 +64,7 @@ func HandleSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	verifiers.Store(body.State, body.State)
+	verifiers.Store(body.State, body.CodeVerifier)
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -84,7 +98,7 @@ func HandleCallback(w http.ResponseWriter, r *http.Request) {
 	data.Set("code_verifier", codeVerifier)
 	data.Set("grant_type", "authorization_code")
 
-	req, err := http.NewRequest("POST", "http://accounts.spotify.com/api/token", bytes.NewBufferString(data.Encode()))
+	req, err := http.NewRequest("POST", "https://accounts.spotify.com/api/token", bytes.NewBufferString(data.Encode()))
 	if err != nil {
 		log.Printf("Error creating Spotify token request: %v", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -104,7 +118,7 @@ func HandleCallback(w http.ResponseWriter, r *http.Request) {
 	if resp.StatusCode != http.StatusOK {
 		bodyBytes, _ := io.ReadAll(resp.Body)
 		log.Printf("Spotify token exchange failed. Status: %d, Body: %s", resp.StatusCode, string(bodyBytes))
-		http.Error(w, fmt.Sprintf("Failed to get tokens from Spotify: %s", string(bodyBytes)), resp.StatusCode)
+		http.Error(w, string(bodyBytes), resp.StatusCode)
 		return
 	}
 
@@ -160,7 +174,7 @@ func HandleRefresh(w http.ResponseWriter, r *http.Request) {
 	data.Set("refresh_token", refresh)
 	data.Set("client_id", client)
 
-	req, err := http.NewRequest("POST", "http://accounts.spotify.com/api/token", bytes.NewBufferString(data.Encode()))
+	req, err := http.NewRequest("POST", "https://accounts.spotify.com/api/token", bytes.NewBufferString(data.Encode()))
 	if err != nil {
 		log.Printf("Error creating Spotify refresh request: %v", err)
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
