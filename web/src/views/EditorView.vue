@@ -21,7 +21,6 @@ onBeforeMount(async () => {
       </div>
     </div>
     <div class="from container border">
-
     </div>
     <div class="delta container border"></div>
   </div>
@@ -29,11 +28,13 @@ onBeforeMount(async () => {
 
 <style lang="css" scoped>
 .editor {
+  height: 100%;
+
   display: flex;
   flex-direction: row;
-  max-height: 90vh;
 
   justify-content: space-evenly;
+  align-items: center;
 }
 
 .container {
@@ -44,7 +45,7 @@ onBeforeMount(async () => {
   overflow-y: scroll;
   overflow-x: hidden;
   width: 30%;
-  max-height: 100%;
+  max-height: 90%;
 }
 
 .playlists {
@@ -53,8 +54,7 @@ onBeforeMount(async () => {
   gap: 0.5em;
 }
 
-.playlists > * {
+.playlists>* {
   height: 4em;
 }
-
 </style>
