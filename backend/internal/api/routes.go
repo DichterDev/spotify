@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -14,17 +15,20 @@ func Start() {
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Recoverer)
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{frontendRedirect},
+		AllowedOrigins:   []string{env.FrontendURL},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		AllowCredentials: true,
 		MaxAge:           300,
 	}))
 
-	r.Post("/session", HandleSession)
-	r.Get("/callback", HandleCallback)
-	r.Post("/refresh", HandleRefresh)
-	r.Get("/token", HandleCurrentAccessToken)
+	r.Get("/login", handleLogin)
+	r.Get(env.CallbackPath, handleCallback)
+	r.Post("/refresh", handleRefresh)
+	r.Post("/token", HandleCurrentAccessToken)
 
-	http.ListenAndServe(":3000", r)
+	port := ":3000"
+
+	log.Printf("Server starting on port: %s", port)
+	log.Fatal(http.ListenAndServe(port, r))
 }

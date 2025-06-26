@@ -38,15 +38,17 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const isLoggedIn = useAuthStore().isLoggedIn
+  const authStore = useAuthStore()
   if(to.meta.requiresAuth) {
-    if(!isLoggedIn) {
-      next({ name: 'login', query: { redirect: to.fullPath }})
+    if(!authStore.isLoggedIn) {
+      await authStore.refresh()
+      if(!authStore.isLoggedIn) {
+        next({ name: 'login', query: { redirect: to.fullPath }})
+      }
     }
-    if(await useAuthStore().refreshToken()) next()
   }
 
-  if(to.name === 'login' && isLoggedIn) next({ name: 'home'})
+  // if(to.name === 'login' && isLoggedIn) next({ name: 'home'})
   next()
 })
 

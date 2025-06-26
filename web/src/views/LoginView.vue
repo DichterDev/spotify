@@ -11,6 +11,6 @@ const auth = useAuthStore()
     <div>To access this application you need to login</div>
     <div>Sorry for the inconvenience :3</div>
     <div @click="auth.login">Login</div>
-    <div @click="auth.refreshToken">Refresh</div>
+    <div @click="auth.refresh">Refresh</div>
   </div>
 </template>

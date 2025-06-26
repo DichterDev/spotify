@@ -7,5 +7,8 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div><span>{{ props.playlist.name }}</span></div>
+  <div class="playlist">
+    <img :src="props.playlist?.images[0].url" />
+    <span v-if="props.playlist">{{ props.playlist?.name }}</span>
+  </div>
 </template>

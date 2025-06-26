@@ -8,7 +8,7 @@ export const spotify = ky.create({
     beforeRequest: [
       async (request) => {
         const token = useAuthStore().getToken()
-        if (token) request.headers.set('Authorization', `Bearer ${token.value}`)
+        if (token) request.headers.set('Authorization', `Bearer ${token}`)
       }
     ],
     afterResponse: [
