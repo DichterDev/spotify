@@ -45,7 +45,7 @@ onBeforeMount(async () => {
   overflow-y: scroll;
   overflow-x: hidden;
   width: 30%;
-  max-height: 90%;
+  height: 90%;
 }
 
 .playlists {
@@ -55,6 +55,6 @@ onBeforeMount(async () => {
 }
 
 .playlists>* {
-  height: 4em;
+  height: 3em;
 }
 </style>

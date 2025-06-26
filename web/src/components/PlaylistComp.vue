@@ -8,53 +8,58 @@ const props = defineProps<{
 
 <template>
   <div class="playlist">
-    <img class="cover" :src="props.playlist?.images[0].url" />
-    <span class="name">{{ props.playlist?.name }}</span>
-    <div class="info">
-      <span>{{ props.playlist.tracks.total }}</span>
-      <span>{{ props.playlist.owner.display_name }}</span>
+    <img class="playlist-cover" :src="props.playlist?.images[0].url" />
+    <div class="playlist-content">
+      <div class="playlist-name">{{ props.playlist?.name }}</div>
+      <div class="playlist-info">
+        <span>{{ props.playlist.tracks.total }} Songs</span>
+        <span> - </span>
+        <span>{{ props.playlist.owner.display_name }}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="css" scoped>
 .playlist {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: fit-content(100%) 1fr;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  justify-content: start;
+  align-items: center;
 
   box-sizing: border-box;
+
+  user-select: none;
 }
 
 .playlist:hover {
   cursor: pointer;
-  background-color: lightslategrey;
 }
 
-.cover {
+.playlist-cover {
   height: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 0.25em;
+
+  box-sizing: border-box;
 }
 
-.name {
+.playlist-name {
   overflow: hidden;
   text-overflow: ellipsis;
   text-wrap: nowrap;
 }
 
-.cover {
-  grid-row: span 2;
-  grid-column: 1;
+.playlist-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 0.5em;
 }
 
-.name {
-  grid-row: 1;
-  grid-column: 2;
+.playlist-content {
+  line-height: 1.2;
 }
-
-.info {
-
-}
-
 </style>
