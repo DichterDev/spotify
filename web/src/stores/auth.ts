@@ -23,6 +23,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function getToken(): Ref<string | undefined> {
+    console.log(token.value)
     return token
   }
 

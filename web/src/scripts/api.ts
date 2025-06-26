@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/stores/auth";
-import ky from "ky";
+import ky, { HTTPError } from "ky";
 
 export const spotify = ky.create({ 
   prefixUrl: 'https://api.spotify.com/v1/', 
@@ -13,9 +13,20 @@ export const spotify = ky.create({
     ],
     afterResponse: [
       async (request, options, response) => {
+        console.log(response.status)
         if (response.status === 401) {
           useAuthStore().logout()
         }
+      }
+    ],
+    beforeError: [
+      err => {
+          const error: HTTPError = err
+          const { response } = error
+
+          console.log(JSON.stringify(response))
+
+          return error
       }
     ]
   }
