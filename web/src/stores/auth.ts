@@ -86,12 +86,11 @@ export const useAuthStore = defineStore('auth', () => {
       ).json()
 
       setToken(res.access_token)
-      return true
     } catch {
       return false
     }
 
-    
+    return true
   }
 
   return { isLoggedIn, scopes, getToken, setToken, login, logout, getAccessToken, refreshToken }
