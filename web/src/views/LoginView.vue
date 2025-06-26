@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { login, refreshAccessToken } from '@/scripts/auth';
+import { useAuthStore } from '@/stores/auth';
 
 
+const auth = useAuthStore()
 
 </script>
 
 <template>
   <div class="login-container">
     <div>To access this application you need to login</div>
-    <div>Sorry for the inconvenience :D</div>
-    <div @click="() => login()">Login</div>
-    <div @click="() => refreshAccessToken()">Refresh</div>
+    <div>Sorry for the inconvenience :3</div>
+    <div @click="auth.login">Login</div>
   </div>
 </template>

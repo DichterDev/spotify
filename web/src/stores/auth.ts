@@ -1,5 +1,5 @@
 import { generateCodeChallenge, generateRandomString } from "@/scripts/pkce";
-import axios from "axios";
+import ky, { HTTPError } from "ky";
 import { defineStore } from "pinia";
 import { computed, ref, type Ref } from "vue";
 import { useRouter } from "vue-router";
@@ -38,10 +38,10 @@ export const useAuthStore = defineStore('auth', () => {
     const backendUrl = import.meta.env.VITE_APP_BACKEND_URL
     const redirectUrl = import.meta.env.VITE_APP_SPOTIFY_REDIRECT_URL
 
-    await axios.post(`${backendUrl}/session`, {
+    const res = await ky.post(`${backendUrl}/session`, { json: {
       code_verifier: verifier,
       state: state,
-    })
+    }})
 
     const params = new URLSearchParams()
     params.append('client_id', client)
@@ -68,30 +68,30 @@ export const useAuthStore = defineStore('auth', () => {
     const state = params.get('state')
     const router = useRouter()
 
-    if (!state || isLoggedIn) {
+    if (!state) {
       return
     }
 
-    const res = await axios.get<{ access_token: string }>
-      (`${import.meta.env.VITE_APP_BACKEND_URL}/token?state=${state}`)
-    setToken(res.data.access_token)
+    const res = await ky.get<{ access_token: string }>
+      (`${import.meta.env.VITE_APP_BACKEND_URL}/token?state=${state}`).json()
+    setToken(res.access_token)
     router.replace("/")
   }
 
   async function refreshToken(): Promise<boolean> {
     try {
-      const res = await axios.post<{ access_token: string, expires_in: number}>
-      (
+      const res = await ky.post<{ access_token: string, expires_in: number}>(
         `${import.meta.env.VITE_APP_BACKEND_URL}/refresh`, 
-        {}, 
-        { withCredentials: true}
-      )
-      setToken(res.data.access_token)
+        { credentials: 'include' }
+      ).json()
+
+      setToken(res.access_token)
+      return true
     } catch {
       return false
     }
 
-    return true
+    
   }
 
   return { isLoggedIn, scopes, getToken, setToken, login, logout, getAccessToken, refreshToken }

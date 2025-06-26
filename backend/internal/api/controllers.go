@@ -136,7 +136,7 @@ func HandleCallback(w http.ResponseWriter, r *http.Request) {
 		Expires:  time.Now().Add(30 * 24 * time.Hour), // 30 days expiry
 		HttpOnly: true,                                // Crucial for security
 		Secure:   false,                               // Crucial for production (HTTPS only)
-		SameSite: http.SameSiteLaxMode,                // Helps mitigate CSRF
+		SameSite: http.SameSiteNoneMode,               // Helps mitigate CSRF
 	})
 
 	tokens.Store(state, authResponse.AccessToken)
@@ -213,7 +213,7 @@ func HandleRefresh(w http.ResponseWriter, r *http.Request) {
 			Expires:  time.Now().Add(30 * 24 * time.Hour),
 			HttpOnly: true,
 			Secure:   false,
-			SameSite: http.SameSiteLaxMode,
+			SameSite: http.SameSiteNoneMode,
 		})
 	}
 

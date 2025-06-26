@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
-import { getAccessToken } from './scripts/auth';
+import { useAuthStore } from './stores/auth';
 
+const auth = useAuthStore()
 
-onBeforeMount(async () => { await getAccessToken()})
+onBeforeMount(async () => { await auth.getAccessToken() })
 </script>
 
 <template>
-  <nav>
-    <RouterLink to="/login">Login</RouterLink>
-  </nav>
   <main>
     <RouterView></RouterView>
   </main>

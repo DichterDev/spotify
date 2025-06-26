@@ -1,5 +1,22 @@
-import axios from "axios";
+import { useAuthStore } from "@/stores/auth";
+import ky from "ky";
 
-const api = axios.create({
-  withCredentials: true
+export const spotify = ky.create({ 
+  prefixUrl: 'https://api.spotify.com/v1/', 
+  timeout: 3000,
+  hooks: {
+    beforeRequest: [
+      async (request) => {
+        const token = useAuthStore().getToken()
+        if (token) request.headers.set('Authorization', `Bearer ${token.value}`)
+      }
+    ],
+    afterResponse: [
+      async (request, options, response) => {
+        if (response.status === 401) {
+          useAuthStore().logout()
+        }
+      }
+    ]
+  }
 })
