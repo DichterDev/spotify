@@ -24,8 +24,6 @@ export const spotify = ky.create({
           const error: HTTPError = err
           const { response } = error
 
-          console.log(JSON.stringify(response))
-
           return error
       }
     ]

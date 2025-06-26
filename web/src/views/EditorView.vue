@@ -15,16 +15,46 @@ onBeforeMount(async () => {
 
 <template>
   <div class="editor">
-    <div>Editor</div>
-    <div class="target">
-      <div>Target:</div>
+    <div class="target container border">
       <div class="playlists">
         <PlaylistComp :playlist="p" v-for="p in playlists"></PlaylistComp>
       </div>
     </div>
-    <div class="from">
+    <div class="from container border">
 
     </div>
-    <div class="delta"></div>
+    <div class="delta container border"></div>
   </div>
 </template>
+
+<style lang="css" scoped>
+.editor {
+  display: flex;
+  flex-direction: row;
+  max-height: 90vh;
+
+  justify-content: space-evenly;
+}
+
+.container {
+  background-color: var(--primary);
+
+  padding: 10px;
+
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 30%;
+  max-height: 100%;
+}
+
+.playlists {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.playlists > * {
+  height: 4em;
+}
+
+</style>
