@@ -60,8 +60,6 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 		oauth2.AccessTypeOffline,
 	)
 
-	log.Printf("Verifier: %s", verifier)
-
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 
@@ -115,7 +113,7 @@ func handleCallback(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteLaxMode,
 	})
 
-	url := fmt.Sprintf("%s?authSuccess=true&state=%s", env.FrontendURL, state)
+	url := fmt.Sprintf("%s/callback?authSuccess=true&state=%s", env.FrontendURL, state)
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
