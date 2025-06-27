@@ -1,22 +1,16 @@
 <script setup lang="ts">
-import type { SimplifiedPlaylist } from '@/types/spotify';
+import type { SimplifiedPlaylist, Track } from '@/types/spotify';
 import { onBeforeMount, ref } from 'vue';
 import { getPlaylists, searchPlaylists } from '@/scripts/util';
 
-import PlaylistComp from '@/components/PlaylistComp.vue';
-import Search from '@/components/Search.vue';
+import Playlists from '@/components/Playlists.vue';
 
 
-const _playlists = ref<SimplifiedPlaylist[]>([])
 const playlists = ref<SimplifiedPlaylist[]>([])
-
-async function handleTargetSearch(query: string) {
-  playlists.value = await searchPlaylists(query, _playlists.value)
-}
+const target = ref<SimplifiedPlaylist>()
 
 onBeforeMount(async () => {
-  _playlists.value = await getPlaylists()
-  playlists.value = _playlists.value
+  playlists.value = await getPlaylists()
 })
 
 </script>
@@ -24,10 +18,7 @@ onBeforeMount(async () => {
 <template>
   <div class="editor">
     <div class="target container border">
-      <div class="playlists">
-        <Search @search:change="handleTargetSearch"></Search>
-        <PlaylistComp :key="p.id" :playlist="p" v-for="p in playlists"></PlaylistComp>
-      </div>
+      <Playlists :playlists="playlists" @click:playlist="(p) => target = p"></Playlists>
     </div>
     <div class="from container border">
     </div>
@@ -55,15 +46,5 @@ onBeforeMount(async () => {
   overflow-x: hidden;
   width: 30%;
   height: 90%;
-}
-
-.playlists {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-}
-
-.playlists>* {
-  height: 3em;
 }
 </style>
