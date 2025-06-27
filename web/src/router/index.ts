@@ -43,14 +43,13 @@ const router = createRouter({
 
   ],
 })
-
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
-  if(to.meta.requiresAuth) {
-    if(!authStore.isLoggedIn) {
+  if (to.meta.requiresAuth) {
+    if (!authStore.isLoggedIn) {
       await authStore.refresh()
-      if(!authStore.isLoggedIn) {
-        next({ name: 'login', query: { redirect: to.fullPath }})
+      if (!authStore.isLoggedIn) {
+        next({ name: 'login', query: { redirect: to.fullPath } })
       }
     }
   }

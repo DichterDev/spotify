@@ -107,7 +107,6 @@ func handleCallback(w http.ResponseWriter, r *http.Request) {
 		Name:     "refresh_token",
 		Value:    token.RefreshToken,
 		Path:     "/",
-		Expires:  time.Now().Add(30 * 24 * time.Hour),
 		HttpOnly: true,
 		Secure:   false, // SET TO TRUE IN PROD
 		SameSite: http.SameSiteLaxMode,
@@ -149,9 +148,8 @@ func handleRefresh(w http.ResponseWriter, r *http.Request) {
 	if token.RefreshToken != "" && token.RefreshToken != refresh.RefreshToken {
 		http.SetCookie(w, &http.Cookie{
 			Name:     "refresh_token",
-			Value:    refresh.RefreshToken,
+			Value:    token.RefreshToken,
 			Path:     "/",
-			Expires:  time.Now().Add(30 * 24 * time.Hour),
 			HttpOnly: true,
 			Secure:   false, // TRUE IN PROD
 			SameSite: http.SameSiteLaxMode,

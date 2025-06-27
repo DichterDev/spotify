@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import type { SimplifiedPlaylist } from '@/types/spotify';
 import { onBeforeMount, ref } from 'vue';
+import { getPlaylists, searchPlaylists } from '@/scripts/util';
 
 import PlaylistComp from '@/components/PlaylistComp.vue';
-import { getPlaylists } from '@/scripts/util';
+import Search from '@/components/Search.vue';
 
+
+const _playlists = ref<SimplifiedPlaylist[]>([])
 const playlists = ref<SimplifiedPlaylist[]>([])
 
+async function handleTargetSearch(query: string) {
+  playlists.value = await searchPlaylists(query, _playlists.value)
+}
+
 onBeforeMount(async () => {
-  playlists.value = await getPlaylists()
+  _playlists.value = await getPlaylists()
+  playlists.value = _playlists.value
 })
 
 </script>
@@ -17,7 +25,8 @@ onBeforeMount(async () => {
   <div class="editor">
     <div class="target container border">
       <div class="playlists">
-        <PlaylistComp :playlist="p" v-for="p in playlists"></PlaylistComp>
+        <Search @search:change="handleTargetSearch"></Search>
+        <PlaylistComp :key="p.id" :playlist="p" v-for="p in playlists"></PlaylistComp>
       </div>
     </div>
     <div class="from container border">
