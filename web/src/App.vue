@@ -3,19 +3,24 @@ import { ref } from 'vue';
 
 const hiddenSidebar = ref(true)
 
+function displayRoute(route?: string): string {
+  if (!route) return "Home"
+  return route.charAt(0).toUpperCase() + route.slice(1)
+}
+
 </script>
 
 <template>
   <div>
     <nav>
       <span @click="() => hiddenSidebar = !hiddenSidebar"><i class="las la-bars"></i></span>
-      <span>{{ $router.currentRoute.value.name?.toString() }}</span>
+      <span>{{ displayRoute($router.currentRoute.value.name?.toString()) }}</span>
     </nav>
     <main>
       <RouterView></RouterView>
     </main>
     <div class="sidebar" v-if="!hiddenSidebar">
-      <div class="sidebar-content">
+      <div class="sidebar-content" @click="() => hiddenSidebar = true">
         <RouterLink to="/">
           <span><i class="las la-home"></i></span>
           <span>Home</span>
