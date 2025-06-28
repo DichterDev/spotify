@@ -28,15 +28,29 @@ const props = defineProps<{
   height: 3em;
   display: flex;
   flex-direction: row;
+  gap: 0.5em;
+
+  user-select: none;
+}
+
+.track:hover {
+  cursor: pointer;
+}
+
+.track-info {
+  display: flex;
+  flex-direction: column;
 }
 
 .track-cover {
   height: 100%;
   aspect-ratio: 1 / 1;
+  border-radius: 0.25em;
 }
 
 .track-name,
 .track-artists {
+  flex: 1;
   overflow-x: hidden;
   text-overflow: ellipsis;
   text-wrap: nowrap;
