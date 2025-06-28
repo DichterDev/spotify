@@ -9,9 +9,9 @@ const props = defineProps<{
 <template>
   <div class="playlist">
     <img class="playlist-cover" :src="props.playlist?.images[0].url" />
-    <div class="playlist-content">
+    <div class="playlist-info">
       <div class="playlist-name">{{ props.playlist?.name }}</div>
-      <div class="playlist-info">
+      <div class="playlist-extra">
         <span>{{ props.playlist.tracks.total }} Songs</span>
         <span> - </span>
         <span>{{ props.playlist.owner.display_name }}</span>
@@ -27,10 +27,6 @@ const props = defineProps<{
   display: flex;
   flex-direction: row;
   gap: 0.5em;
-  justify-content: start;
-  align-items: center;
-
-  box-sizing: border-box;
 
   user-select: none;
 }
@@ -43,25 +39,22 @@ const props = defineProps<{
   height: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 0.25em;
+}
 
-  box-sizing: border-box;
+.playlist-info {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .playlist-name {
+  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   text-wrap: nowrap;
 }
 
-.playlist-content {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  gap: 0.5em;
-}
-
-.playlist-content {
-  line-height: 1.2;
+.playlist-extra {
+  flex: 1;
 }
 </style>
