@@ -18,8 +18,12 @@ const emit = defineEmits<{
 
 const tracks = ref<Track[]>([])
 
+function callbackTracks(ts: Track[]) {
+  tracks.value = tracks.value.concat(ts)
+}
+
 onMounted(async () => {
-  const res = await getTracks(props.playlist.id)
+  const res = await getTracks(props.playlist.id, callbackTracks)
   tracks.value = res
 })
 </script>

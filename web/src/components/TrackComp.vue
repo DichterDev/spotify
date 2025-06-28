@@ -6,17 +6,15 @@ const props = defineProps<{
   track: Track
 }>()
 
-console.log(props.track.id)
-
 </script>
 
 <template>
   <div class="track">
-    <img class="track-cover" :src="track.album.images[0].url" />
+    <img class="track-cover" :src="props.track.album.images[0].url" />
     <div class="track-info">
-      <span class="track-name">{{ track.name }}</span>
+      <span class="track-name">{{ props.track.name }}</span>
       <div class="track-artists">
-        <span v-for="artist in track.artists">
+        <span v-for="artist in props.track.artists">
           <a :href="artist.external_urls.spotify">{{ artist.name }}</a>
           &nbsp;
         </span>

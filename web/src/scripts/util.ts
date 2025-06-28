@@ -6,9 +6,18 @@ export async function getProfile(): Promise<CurrentUser> {
   return res.json()
 }
 
-export async function getTracks(id: string): Promise<Track[]> {
-  // TODO: fields and recursion
-  const res = await spotify.get(`playlists/${id}/tracks`).json<Response<PlaylistTrack>>()
+async function getAllTracks(url: string, callback: (tracks: Track[]) => void) {
+  const res = await spotify.get(url, { prefixUrl: '' }).json<Response<PlaylistTrack>>()
+  const tracks = res.items.map(({ track }) => track)
+  callback(tracks)
+  if (res.next) getAllTracks(res.next, callback)
+}
+
+export async function getTracks(id: string, callback?: (tracks: Track[]) => void, limit: number = 50,): Promise<Track[]> {
+  const res = await spotify.get(`playlists/${id}/tracks?limit=${limit}`).json<Response<PlaylistTrack>>()
+  if (callback) {
+    getAllTracks(res.next, callback)
+  }
   return res.items.map(({ track }) => track)
 }
 
@@ -34,8 +43,6 @@ export async function searchPlaylists(query: string, playlists: SimplifiedPlayli
   }
 
   const p = playlists.filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
-
-  if (p.length === 0) return playlists
 
   return p
 }
