@@ -45,7 +45,14 @@ onMounted(async () => {
 </template>
 
 <style lang="css" scoped>
+.tracks-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+}
+
 .tracks {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.5em;

@@ -30,13 +30,16 @@ async function handleSearch(query: string) {
 </template>
 
 <style lang="css" scoped>
+.playlists-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+}
+
 .playlists {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-}
-
-.playlists>* {
-  height: 3em;
+  overflow-y: scroll;
 }
 </style>
