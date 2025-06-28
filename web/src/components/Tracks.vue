@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getTracks } from '@/scripts/util';
+import { getTracks, searchTracks } from '@/scripts/util';
 import type { SimplifiedPlaylist, Track } from '@/types/spotify';
 import { onBeforeMount, onMounted, ref } from 'vue';
 
@@ -17,23 +17,29 @@ const emit = defineEmits<{
 }>()
 
 const tracks = ref<Track[]>([])
+const visibleTracks = ref<Track[]>([])
 
 function callbackTracks(ts: Track[]) {
   tracks.value = tracks.value.concat(ts)
+  visibleTracks.value = tracks.value
+}
+
+function handleSearch(query: string) {
+  visibleTracks.value = searchTracks(query, tracks.value)
 }
 
 onMounted(async () => {
   const res = await getTracks(props.playlist.id, callbackTracks)
-  tracks.value = res
+  callbackTracks(res)
 })
 </script>
 
 <template>
   <div class="tracks-container">
-    <PlaylistComp :playlist="playlist"></PlaylistComp>
-    <Search></Search>
+    <PlaylistComp :playlist="playlist" @click="emit('back')"></PlaylistComp>
+    <Search @search:change="handleSearch"></Search>
     <div class="tracks" v-if="tracks.length">
-      <TrackComp :track="t" v-for="t in tracks" @click="emit('track:click', t)"></TrackComp>
+      <TrackComp :track="t" v-for="t in visibleTracks" @click="emit('track:click', t)"></TrackComp>
     </div>
   </div>
 </template>

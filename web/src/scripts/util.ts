@@ -13,7 +13,7 @@ async function getAllTracks(url: string, callback: (tracks: Track[]) => void) {
   if (res.next) getAllTracks(res.next, callback)
 }
 
-export async function getTracks(id: string, callback?: (tracks: Track[]) => void, limit: number = 50,): Promise<Track[]> {
+export async function getTracks(id: string, callback?: (tracks: Track[]) => void, limit: number = 50): Promise<Track[]> {
   const res = await spotify.get(`playlists/${id}/tracks?limit=${limit}`).json<Response<PlaylistTrack>>()
   if (callback) {
     getAllTracks(res.next, callback)
@@ -29,7 +29,24 @@ export async function getPlaylists(): Promise<SimplifiedPlaylist[]> {
   const res = await spotify.get<Response<SimplifiedPlaylist>>('me/playlists').json()
   return res.items
 }
-export function searchTracks() { }
+
+export function searchTracks(query: string, tracks: Track[]) {
+  query = query.toLowerCase()
+  if (query.length === 0) return tracks
+
+  const t = tracks.filter(({ name, artists }) => {
+    if (name.toLowerCase().includes(query)) {
+      return true
+    }
+    if (artists.some((artist) => artist.name.toLowerCase().includes(query))) {
+      return true
+    }
+    return false
+  })
+
+  return t
+}
+
 export async function searchPlaylists(query: string, playlists: SimplifiedPlaylist[]): Promise<SimplifiedPlaylist[]> {
   if (query.length === 0) return playlists
   if (isValidUrl(query)) {
@@ -46,6 +63,7 @@ export async function searchPlaylists(query: string, playlists: SimplifiedPlayli
 
   return p
 }
+
 export function submit() { }
 
 function isValidUrl(str: string): boolean {

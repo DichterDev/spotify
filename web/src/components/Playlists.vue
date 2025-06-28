@@ -15,8 +15,6 @@ const emits = defineEmits<{
 
 const playlists = ref<SimplifiedPlaylist[]>(props.playlists)
 
-console.log(playlists.value)
-
 async function handleSearch(query: string) {
   playlists.value = await searchPlaylists(query, props.playlists)
 }

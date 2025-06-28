@@ -22,11 +22,13 @@ onBeforeMount(async () => {
       <Playlists :playlists="playlists" @click:playlist="(p) => editor.target = p"
         v-if="playlists.length && !editor.target">
       </Playlists>
-      <Tracks :playlist="editor.target" v-if="editor.target" @track:click="(t) => editor.toggleAdded(t)"></Tracks>
+      <Tracks :playlist="editor.target" v-if="editor.target" @track:click="(t) => editor.toggleAdded(t)"
+        @back="() => editor.target = undefined"></Tracks>
     </div>
     <div class="from container border">
     </div>
-    <div class="delta container border"></div>
+    <div class="delta container border">
+    </div>
   </div>
 </template>
 
