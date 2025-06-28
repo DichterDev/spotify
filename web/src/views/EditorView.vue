@@ -2,10 +2,13 @@
 import type { SimplifiedPlaylist, Track } from '@/types/spotify';
 import { onBeforeMount, ref } from 'vue';
 import { getPlaylists, searchPlaylists } from '@/scripts/util';
+import { useEditorStore } from '@/stores/editor';
+
 
 import Playlists from '@/components/Playlists.vue';
 import Tracks from '@/components/Tracks.vue';
-import { useEditorStore } from '@/stores/editor';
+import TrackComp from '@/components/TrackComp.vue';
+import PlaylistComp from '@/components/PlaylistComp.vue';
 
 const editor = useEditorStore()
 const playlists = ref<SimplifiedPlaylist[]>([])
@@ -22,12 +25,20 @@ onBeforeMount(async () => {
       <Playlists :playlists="playlists" @click:playlist="(p) => editor.target = p"
         v-if="playlists.length && !editor.target">
       </Playlists>
-      <Tracks :playlist="editor.target" v-if="editor.target" @track:click="(t) => editor.toggleAdded(t)"
-        @back="() => editor.target = undefined"></Tracks>
+      <Tracks v-if="editor.target" :playlist="editor.target" @track:click="(t) => editor.toggleAdded(t)"
+        @back="() => editor.target = undefined">
+      </Tracks>
     </div>
     <div class="from container border">
     </div>
     <div class="delta container border">
+      <div class="added">
+        <TrackComp :track="t" v-for="t in editor.added"></TrackComp>
+      </div>
+      <div class="removed">
+        <TrackComp :track="t" v-for="t in editor.removed"></TrackComp>
+      </div>
+      <button>Submit</button>
     </div>
   </div>
 </template>
@@ -48,9 +59,7 @@ onBeforeMount(async () => {
 
   padding: 10px;
 
-  overflow-y: scroll;
-  overflow-x: hidden;
   width: 30%;
-  height: 90%;
+  height: 95%;
 }
 </style>
