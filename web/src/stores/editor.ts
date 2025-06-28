@@ -11,7 +11,7 @@ export const useEditorStore = defineStore('editor', () => {
   function toggle(ts: Track[], t: Track): Track[] {
     const i = ts.findIndex(({ id }) => id === t.id)
     if (i === -1) ts.push(t)
-    else return ts.slice(i, 1)
+    else ts.splice(i, 1)
     return ts
   }
 

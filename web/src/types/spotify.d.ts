@@ -112,21 +112,21 @@ interface Track {
   available_markets: string[]
   disc_number: number
   duration_ms: number
-  explicit: false
+  explicit: boolean
   external_ids: { isrc: string; ean: string; upc: string }
   external_urls: ExternalUrl
   href: string
   id: string
-  is_playable: false
+  is_playable: boolean
   linked_from: {}
   restrictions: { reason: string }
   name: string
-  popularity: 0
+  popularity: number
   preview_url: string
-  track_number: 0
+  track_number: number
   type: string
   uri: string
-  is_local: false
+  is_local: boolean
 }
 
 interface PlaylistTrack {

@@ -33,10 +33,10 @@ onBeforeMount(async () => {
     </div>
     <div class="delta container border">
       <div class="added">
-        <TrackComp :track="t" v-for="t in editor.added"></TrackComp>
+        <TrackComp :track="t" :key="t.id" v-for="t in editor.added"></TrackComp>
       </div>
       <div class="removed">
-        <TrackComp :track="t" v-for="t in editor.removed"></TrackComp>
+        <TrackComp :track="t" :key="t.id" v-for="t in editor.removed"></TrackComp>
       </div>
       <button>Submit</button>
     </div>

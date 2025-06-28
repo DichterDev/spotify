@@ -8,7 +8,7 @@ export async function getProfile(): Promise<CurrentUser> {
 
 async function getAllTracks(url: string, callback: (tracks: Track[]) => void) {
   const res = await spotify.get(url, { prefixUrl: '' }).json<Response<PlaylistTrack>>()
-  const tracks = res.items.map(({ track }) => track)
+  const tracks = res.items.map(({ track }) => track).filter(t => t.is_local !== true)
   callback(tracks)
   if (res.next) getAllTracks(res.next, callback)
 }
@@ -18,7 +18,7 @@ export async function getTracks(id: string, callback?: (tracks: Track[]) => void
   if (callback) {
     getAllTracks(res.next, callback)
   }
-  return res.items.map(({ track }) => track)
+  return res.items.map(({ track }) => track).filter(t => t.is_local !== true)
 }
 
 export async function getPlaylist(id: string): Promise<Playlist> {
