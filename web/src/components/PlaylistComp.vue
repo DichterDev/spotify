@@ -22,6 +22,8 @@ const props = defineProps<{
 
 <style lang="css" scoped>
 .playlist {
+  height: 3em;
+
   display: flex;
   flex-direction: row;
   gap: 0.5em;

@@ -1,4 +1,4 @@
-import type { Response, CurrentUser, SimplifiedPlaylist, Playlist } from '@/types/spotify'
+import type { Response, CurrentUser, SimplifiedPlaylist, Playlist, Track, PlaylistTrack } from '@/types/spotify'
 import { spotify } from './api'
 
 export async function getProfile(): Promise<CurrentUser> {
@@ -6,7 +6,12 @@ export async function getProfile(): Promise<CurrentUser> {
   return res.json()
 }
 
-export async function getTracks(url: string) { }
+export async function getTracks(id: string): Promise<Track[]> {
+  // TODO: fields and recursion
+  const res = await spotify.get(`playlists/${id}/tracks`).json<Response<PlaylistTrack>>()
+  return res.items.map(({ track }) => track)
+}
+
 export async function getPlaylist(id: string): Promise<Playlist> {
   const res = await spotify.get(`playlists/${id}`).json<Playlist>()
   return res
@@ -31,8 +36,6 @@ export async function searchPlaylists(query: string, playlists: SimplifiedPlayli
   const p = playlists.filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
 
   if (p.length === 0) return playlists
-
-  console.log(p)
 
   return p
 }

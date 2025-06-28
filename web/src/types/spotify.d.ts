@@ -131,7 +131,7 @@ interface Track {
 
 interface PlaylistTrack {
   added_at: string
-  added_by: string
+  added_by: Owner
   is_local: boolean
   track: Track
 }

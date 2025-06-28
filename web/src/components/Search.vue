@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-const emit = defineEmits(["search:change", "button:refresh"])
+const emit = defineEmits(["search:change", "refresh:click"])
 </script>
 
 <template>
