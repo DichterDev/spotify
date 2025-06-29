@@ -73,17 +73,20 @@ export async function submit() {
   const id = editor.target?.id
   const snapshot = editor.target?.snapshot_id
 
-  if (!id) throw Error("Target playlist ID not found")
-  if (!snapshot) throw Error("Target playlist snapshot not found")
+  if (!editor.target) throw new Error("No target playlist selected")
+  if (!id) throw new Error("Target playlist ID not found")
+  if (!snapshot) throw new Error("Target playlist snapshot not found")
 
   if (added.length) {
     const data = { uris: added }
-    await spotify.post(`playlists/${editor.target?.id}/tracks`, { json: data }).json()
+    const res = await spotify.post(`playlists/${editor.target?.id}/tracks`, { json: data }).json<{ snapshot_id: string }>()
+    editor.target.snapshot_id = res.snapshot_id
   }
 
   if (removed.length) {
     const data = { tracks: removed.map(uri => ({ uri: uri })), snapshot_id: editor.target?.snapshot_id }
-    await spotify.delete(`playlists/${editor.target?.id}/tracks`, { json: data })
+    const res = await spotify.delete(`playlists/${editor.target?.id}/tracks`, { json: data }).json<{ snapshot_id: string }>()
+    editor.target.snapshot_id = res.snapshot_id
   }
 
   editor.reset()

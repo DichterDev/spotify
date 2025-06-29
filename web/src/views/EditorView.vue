@@ -12,6 +12,13 @@ import PlaylistComp from '@/components/PlaylistComp.vue';
 
 const editor = useEditorStore()
 const playlists = ref<SimplifiedPlaylist[]>([])
+const showTargetTracks = ref(true)
+
+async function handleSubmit() {
+  submit()
+  showTargetTracks.value = false
+  setTimeout(() => showTargetTracks.value = true, 200)
+}
 
 onBeforeMount(async () => {
   playlists.value = await getPlaylists()
@@ -25,8 +32,8 @@ onBeforeMount(async () => {
       <Playlists :playlists="playlists" @click:playlist="(p) => editor.target = p"
         v-if="playlists.length && !editor.target">
       </Playlists>
-      <Tracks v-if="editor.target" :playlist="editor.target" @track:click="(t) => editor.toggleRemoved(t)"
-        @back="() => editor.target = undefined">
+      <Tracks v-if="editor.target && showTargetTracks" :playlist="editor.target"
+        @track:click="(t) => editor.toggleRemoved(t)" @back="() => editor.target = undefined">
       </Tracks>
     </div>
     <div class="from container border">
@@ -47,7 +54,7 @@ onBeforeMount(async () => {
         <TrackComp :track="t" :key="t.id" v-for="t in editor.removed" @click="editor.toggleRemoved(t)">
         </TrackComp>
       </div>
-      <button :disabled="(editor.added.length + editor.removed.length) === 0" @click="submit">Submit</button>
+      <button :disabled="(editor.added.length + editor.removed.length) === 0" @click="handleSubmit">Submit</button>
     </div>
   </div>
 </template>
