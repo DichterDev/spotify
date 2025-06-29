@@ -25,18 +25,20 @@ onBeforeMount(async () => {
       <Playlists :playlists="playlists" @click:playlist="(p) => editor.target = p"
         v-if="playlists.length && !editor.target">
       </Playlists>
-      <Tracks v-if="editor.target" :playlist="editor.target" @track:click="(t) => editor.toggleAdded(t)"
+      <Tracks v-if="editor.target" :playlist="editor.target" @track:click="(t) => editor.toggleRemoved(t)"
         @back="() => editor.target = undefined">
       </Tracks>
     </div>
     <div class="from container border">
     </div>
     <div class="delta container border">
-      <div class="added">
-        <TrackComp :track="t" :key="t.id" v-for="t in editor.added"></TrackComp>
+      <div class="added" v-if="editor.added.length">
+        <TrackComp :track="t" :key="t.id" v-for="t in editor.added" @click="editor.toggleAdded(t)">
+        </TrackComp>
       </div>
-      <div class="removed">
-        <TrackComp :track="t" :key="t.id" v-for="t in editor.removed"></TrackComp>
+      <div class="removed" v-if="editor.removed.length">
+        <TrackComp :track="t" :key="t.id" v-for="t in editor.removed" @click="editor.toggleRemoved(t)">
+        </TrackComp>
       </div>
       <button>Submit</button>
     </div>
@@ -61,5 +63,18 @@ onBeforeMount(async () => {
 
   width: 30%;
   height: 95%;
+}
+
+.added,
+.removed {
+  padding: 5px;
+}
+
+.added {
+  background-color: lightgreen;
+}
+
+.removed {
+  background-color: lightcoral;
 }
 </style>
