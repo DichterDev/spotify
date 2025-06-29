@@ -1,5 +1,8 @@
 import type { Response, CurrentUser, SimplifiedPlaylist, Playlist, Track, PlaylistTrack } from '@/types/spotify'
 import { spotify } from './api'
+import { useEditorStore } from '@/stores/editor'
+
+const editor = useEditorStore()
 
 export async function getProfile(): Promise<CurrentUser> {
   const res = await spotify.get<CurrentUser>("me")
@@ -64,7 +67,27 @@ export async function searchPlaylists(query: string, playlists: SimplifiedPlayli
   return p
 }
 
-export function submit() { }
+export async function submit() {
+  const added = editor.added.map(({ uri }) => uri)
+  const removed = editor.removed.map(({ uri }) => uri)
+  const id = editor.target?.id
+  const snapshot = editor.target?.snapshot_id
+
+  if (!id) throw Error("Target playlist ID not found")
+  if (!snapshot) throw Error("Target playlist snapshot not found")
+
+  if (added.length) {
+    const data = { uris: added }
+    await spotify.post(`playlists/${editor.target?.id}/tracks`, { json: data }).json()
+  }
+
+  if (removed.length) {
+    const data = { tracks: removed.map(uri => ({ uri: uri })), snapshot_id: editor.target?.snapshot_id }
+    await spotify.delete(`playlists/${editor.target?.id}/tracks`, { json: data })
+  }
+
+  editor.reset()
+}
 
 function isValidUrl(str: string): boolean {
   try {

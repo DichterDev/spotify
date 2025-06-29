@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { SimplifiedPlaylist, Track } from '@/types/spotify';
 import { onBeforeMount, ref } from 'vue';
-import { getPlaylists, searchPlaylists } from '@/scripts/util';
+import { getPlaylists, searchPlaylists, submit } from '@/scripts/util';
 import { useEditorStore } from '@/stores/editor';
 
 
@@ -30,8 +30,15 @@ onBeforeMount(async () => {
       </Tracks>
     </div>
     <div class="from container border">
+      <Playlists :playlists="playlists" @click:playlist="(p) => editor.from = p"
+        v-if="playlists.length && !editor.from">
+      </Playlists>
+      <Tracks v-if="editor.from" :playlist="editor.from" @track:click="(t) => editor.toggleAdded(t)"
+        @back="() => editor.from = undefined">
+      </Tracks>
     </div>
     <div class="delta container border">
+      <PlaylistComp :playlist="editor.target" v-if="editor.target"></PlaylistComp>
       <div class="added" v-if="editor.added.length">
         <TrackComp :track="t" :key="t.id" v-for="t in editor.added" @click="editor.toggleAdded(t)">
         </TrackComp>
@@ -40,7 +47,7 @@ onBeforeMount(async () => {
         <TrackComp :track="t" :key="t.id" v-for="t in editor.removed" @click="editor.toggleRemoved(t)">
         </TrackComp>
       </div>
-      <button>Submit</button>
+      <button @click="submit">Submit</button>
     </div>
   </div>
 </template>
