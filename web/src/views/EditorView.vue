@@ -38,7 +38,7 @@ onBeforeMount(async () => {
       </Tracks>
     </div>
     <div class="delta container border">
-      <PlaylistComp :playlist="editor.target" v-if="editor.target"></PlaylistComp>
+      <PlaylistComp :playlist="editor.target" v-if="editor.target" @click="editor.target = undefined"></PlaylistComp>
       <div class="added" v-if="editor.added.length">
         <TrackComp :track="t" :key="t.id" v-for="t in editor.added" @click="editor.toggleAdded(t)">
         </TrackComp>
@@ -47,7 +47,7 @@ onBeforeMount(async () => {
         <TrackComp :track="t" :key="t.id" v-for="t in editor.removed" @click="editor.toggleRemoved(t)">
         </TrackComp>
       </div>
-      <button @click="submit">Submit</button>
+      <button :disabled="(editor.added.length + editor.removed.length) === 0" @click="submit">Submit</button>
     </div>
   </div>
 </template>
