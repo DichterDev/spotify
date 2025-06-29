@@ -49,6 +49,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   max-height: 100%;
+  gap: 0.5em;
 }
 
 .tracks {
