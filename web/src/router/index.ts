@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/auth'
 import HomeView from '../views/HomeView.vue'
 import AuthCallbackView from '@/views/AuthCallbackView.vue'
 
+import editorRoutes from './editor'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,9 +41,11 @@ const router = createRouter({
       component: () => import('../views/EditorView.vue'),
       meta: { requiresAuth: true }
     },
-
   ],
 })
+
+editorRoutes.map(r => router.addRoute(r))
+
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
   if (to.meta.requiresAuth) {
@@ -54,7 +57,7 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 
-  // if(to.name === 'login' && isLoggedIn) next({ name: 'home'})
+  // if(to.name === 'login' && authStore.isLoggedIn) next({ name: 'home'})
   next()
 })
 

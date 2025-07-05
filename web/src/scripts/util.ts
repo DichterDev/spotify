@@ -2,8 +2,6 @@ import type { Response, CurrentUser, SimplifiedPlaylist, Playlist, Track, Playli
 import { spotify } from './api'
 import { useEditorStore } from '@/stores/editor'
 
-const editor = useEditorStore()
-
 export async function getProfile(): Promise<CurrentUser> {
   const res = await spotify.get<CurrentUser>("me")
   return res.json()
@@ -50,24 +48,14 @@ export function searchTracks(query: string, tracks: Track[]) {
   return t
 }
 
-export async function searchPlaylists(query: string, playlists: SimplifiedPlaylist[]): Promise<SimplifiedPlaylist[]> {
+export function searchPlaylists(query: string, playlists: SimplifiedPlaylist[]): SimplifiedPlaylist[] {
   if (query.length === 0) return playlists
-  if (isValidUrl(query)) {
-    if (!query.includes('spotify') && !query.includes('playlist')) {
-      return playlists
-    }
-
-    const id = query.split('/')[-1].split('?')[0]
-    const playlist = await getPlaylist(id)
-    // TODO
-  }
-
   const p = playlists.filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
-
   return p
 }
 
 export async function submit() {
+  const editor = useEditorStore()
   const added = editor.added.map(({ uri }) => uri)
   const removed = editor.removed.map(({ uri }) => uri)
   const id = editor.target?.id

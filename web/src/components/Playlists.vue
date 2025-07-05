@@ -12,34 +12,18 @@ const props = defineProps<{
 const emits = defineEmits<{
   "click:playlist": [playlist: SimplifiedPlaylist]
 }>()
-
-const playlists = ref<SimplifiedPlaylist[]>(props.playlists)
-
-async function handleSearch(query: string) {
-  playlists.value = await searchPlaylists(query, props.playlists)
-}
 </script>
 
 <template>
-  <div class="playlists-container">
-    <Search @search:change="handleSearch"></Search>
-    <div class="playlists">
-      <PlaylistComp :playlist="p" v-for="p in playlists" @click="emits('click:playlist', p)"></PlaylistComp>
-    </div>
+  <div class="playlists">
+    <PlaylistComp :playlist="p" v-for="p in props.playlists" @click="emits('click:playlist', p)"></PlaylistComp>
   </div>
 </template>
 
 <style lang="css" scoped>
-.playlists-container {
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
-}
-
 .playlists {
   display: flex;
   flex-direction: column;
   gap: 0.5em;
-  overflow-y: scroll;
 }
 </style>

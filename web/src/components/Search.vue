@@ -1,22 +1,22 @@
 <script setup lang="ts">
 
-const emit = defineEmits(["search:change", "refresh:click"])
+const emit = defineEmits<{
+  change: [string]
+}>()
+
+function change(event: Event) {
+  const target = event.target as HTMLInputElement
+  emit('change', target.value)
+}
+
 </script>
 
 <template>
-  <div class="search-container">
-    <input class="search-input" placeholder="Search..."
-      @input="emit('search:change', ($event.target as HTMLInputElement).value)" />
-  </div>
+  <input class="search" type="text" placeholder="Search..." @input="change" />
 </template>
 
 <style lang="css" scoped>
-.search-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.search-input {
+.search {
   flex: 1;
   background-color: var(--secondary);
   border-radius: 0.25em;
