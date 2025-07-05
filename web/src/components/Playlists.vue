@@ -25,5 +25,7 @@ const emits = defineEmits<{
   display: flex;
   flex-direction: column;
   gap: 0.5em;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>
