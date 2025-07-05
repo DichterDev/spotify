@@ -42,32 +42,56 @@ onBeforeMount(async () => {
         <Search @change="handleSearch"></Search>
         <button>Sort</button>
       </div>
-      <Tracks :tracks="visible"></Tracks>
+      <Tracks :tracks="visible" v-if="visible.length"></Tracks>
     </div>
   </div>
 </template>
 
 <style lang="css" scoped>
 .playlist {
-  height: 100%;
+  height: calc(100% - 2em);
   display: flex;
   flex-direction: column;
+  gap: 0.5em;
+
+  margin: 1em;
+  padding: 1em;
+
+  background-color: var(--primary);
+  box-sizing: border-box;
 }
 
 .playlist-header {
-  height: 6em;
+  height: 3em;
   display: flex;
   flex-direction: row;
+  gap: 0.5em;
+
+  padding: 0.5em;
+  box-sizing: content-box;
+
+  background-color: var(--secondary);
+}
+
+#cover {
+  height: 100%;
 }
 
 .tracks-container {
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  min-height: 0;
+  gap: 0.5em;
 }
-
 
 .tracks-header {
   display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
+.tracks-container>:nth-child(2) {
+  padding: 0.5em;
+  background-color: var(--secondary);
 }
 </style>
