@@ -5,6 +5,7 @@ const hiddenSidebar = ref(true)
 
 function displayRoute(route?: string): string {
   if (!route) return "Home"
+  route = route.split('-')[0]
   return route.charAt(0).toUpperCase() + route.slice(1)
 }
 
