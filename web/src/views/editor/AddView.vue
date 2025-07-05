@@ -40,12 +40,36 @@ onBeforeMount(async () => {
   <div class="add">
     <div class="add-header">
       <Search @change="handleSearch"></Search>
+      <button>Sort</button>
     </div>
-    <div class="my-playlists">
+    <div class="my-playlists" v-if="visible.length">
       <Playlists :playlists="visible" @click:playlist="clickPlaylist"></Playlists>
     </div>
     <div class="spotify"></div>
   </div>
 </template>
 
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+.add {
+  height: calc(100% - 2em);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+
+  margin: 1em;
+  padding: 1em;
+
+
+  background-color: var(--primary);
+  box-sizing: border-box;
+}
+
+.add-header {
+  display: flex;
+}
+
+.my-playlists {
+  padding: 0.5em;
+  background-color: var(--secondary);
+}
+</style>
