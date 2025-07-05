@@ -6,6 +6,7 @@ import type { SimplifiedPlaylist, Track } from '@/types/spotify';
 import Tracks from '@/components/Tracks.vue';
 import Search from '@/components/Search.vue';
 import { getTracks, searchTracks } from '@/scripts/util';
+import { useRouter } from 'vue-router';
 
 const editor = useEditorStore()
 const playlist = ref(editor.target)
@@ -17,7 +18,12 @@ function callbackTracks(ts: Track[]) {
   tracks.value = tracks.value.concat(ts)
 }
 
+function handleSearch(query: string) {
+  search.value = query
+}
+
 onBeforeMount(async () => {
+  if (!editor.target) useRouter().push('/editor')
   const id = editor.target!.id
   tracks.value = await getTracks(id, callbackTracks)
 })
@@ -32,8 +38,8 @@ onBeforeMount(async () => {
     </div>
     <div class="tracks-container">
       <div class="tracks-header">
-        <button>Add</button>
-        <Search></Search>
+        <button @click="() => $router.push('/editor/add')">Add</button>
+        <Search @change="handleSearch"></Search>
         <button>Sort</button>
       </div>
       <Tracks :tracks="visible"></Tracks>
