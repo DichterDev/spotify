@@ -80,6 +80,16 @@ export async function submit() {
   editor.reset()
 }
 
+export function getPlaylistID(url: string): string {
+  if (!isValidUrl(url)) return ''
+  if (!url.includes('spotify')) return ''
+  if (!url.includes('playlist')) return ''
+
+  // https://open.spotify.com/playlist/6NtegZhaKz3j1biCriIaI0?si=5a181153ae764ef7
+  const id = url.split('/')[-1].split('?')[-1]
+  return id
+}
+
 function isValidUrl(str: string): boolean {
   try {
     new URL(str)
