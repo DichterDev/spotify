@@ -4,8 +4,6 @@ import CreatePlaylist from "@/views/editor/CreatePlaylist.vue";
 import PlaylistView from "@/views/editor/PlaylistView.vue";
 import type { RouteRecordRaw } from "vue-router";
 
-
-
 const editorRoutes: RouteRecordRaw[] = [
   {
     path: '/editor/:id',
@@ -23,7 +21,7 @@ const editorRoutes: RouteRecordRaw[] = [
     component: AddView
   },
   {
-    path: '/editor/add/:id',
+    path: '/editor/add/playlist/:id',
     name: 'editor-add-playlist',
     component: AddPlaylistView
   },

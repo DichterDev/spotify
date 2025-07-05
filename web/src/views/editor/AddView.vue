@@ -17,13 +17,17 @@ const router = useRouter()
 
 function handleSearch(query: string) {
   const id = getPlaylistID(query)
-  if (!id) search.value = query
-  useRouter().push(`/editor/add/${id}`)
+  if (id) {
+    router.push(`/editor/add/playlist/${id}`)
+    editor.from = id
+  }
+
+  search.value = query
 }
 
 function clickPlaylist(playlist: SimplifiedPlaylist) {
-  editor.from = playlist
-  router.push(`/editor/add/${playlist.id}`)
+  editor.from = playlist.id
+  router.push(`/editor/add/playlist/${playlist.id}`)
 }
 
 onBeforeMount(async () => {

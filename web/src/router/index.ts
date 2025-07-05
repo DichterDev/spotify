@@ -5,6 +5,7 @@ import HomeView from '../views/HomeView.vue'
 import AuthCallbackView from '@/views/AuthCallbackView.vue'
 
 import editorRoutes from './editor'
+import { useEditorStore } from '@/stores/editor'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,9 +53,14 @@ router.beforeEach(async (to, from, next) => {
     if (!authStore.isLoggedIn) {
       await authStore.refresh()
       if (!authStore.isLoggedIn) {
-        next({ name: 'login', query: { redirect: to.fullPath } })
+        next({ name: 'login' })
       }
     }
+  }
+
+  if (to.name?.toString().includes('editor-')) {
+    const editor = useEditorStore()
+    if (!editor.target) next({ name: 'editor' })
   }
 
   // if(to.name === 'login' && authStore.isLoggedIn) next({ name: 'home'})

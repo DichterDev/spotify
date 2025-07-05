@@ -26,6 +26,7 @@ export async function getPlaylist(id: string): Promise<Playlist> {
   const res = await spotify.get(`playlists/${id}`).json<Playlist>()
   return res
 }
+
 export async function getPlaylists(): Promise<SimplifiedPlaylist[]> {
   const res = await spotify.get<Response<SimplifiedPlaylist>>('me/playlists').json()
   return res.items
@@ -85,9 +86,9 @@ export function getPlaylistID(url: string): string {
   if (!url.includes('spotify')) return ''
   if (!url.includes('playlist')) return ''
 
-  // https://open.spotify.com/playlist/6NtegZhaKz3j1biCriIaI0?si=5a181153ae764ef7
-  const id = url.split('/')[-1].split('?')[-1]
-  return id
+  const urlObj = new URL(url)
+  const sub = urlObj.pathname.split('/')
+  return sub[2]
 }
 
 function isValidUrl(str: string): boolean {

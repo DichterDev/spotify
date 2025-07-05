@@ -4,7 +4,7 @@ import { ref } from "vue";
 
 export const useEditorStore = defineStore('editor', () => {
   const target = ref<SimplifiedPlaylist>()
-  const from = ref<SimplifiedPlaylist>()
+  const from = ref<string>()
   const added = ref<Track[]>([])
   const removed = ref<Track[]>([])
 
