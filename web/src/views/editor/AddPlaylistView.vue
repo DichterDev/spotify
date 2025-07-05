@@ -36,28 +36,65 @@ onBeforeMount(async () => {
 
 <template>
   <div class="playlist">
-    <div class="playlist-header"></div>
+    <div class="playlist-header">
+      <img id="cover" :src="playlist?.images[0].url" alt="Playlist Cover">
+      <span>{{ playlist?.name }}</span>
+    </div>
     <div class="tracks-container">
-      <div>
+      <div class="tracks-header">
         <Search @change="handleSearch"></Search>
         <button>Sort</button>
       </div>
-      <Tracks :tracks="visible" @track:click="clickTrack"></Tracks>
+      <Tracks :tracks="visible" @track:click="clickTrack" v-if="visible.length"></Tracks>
     </div>
   </div>
 </template>
 
 <style lang="css" scoped>
 .playlist {
-  height: 100%;
+  height: calc(100% - 2em);
   display: flex;
   flex-direction: column;
+  gap: 0.5em;
+
+  margin: 1em;
+  padding: 1em;
+
+  background-color: var(--primary);
+  box-sizing: border-box;
+}
+
+.playlist-header {
+  height: 3em;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+
+  padding: 0.5em;
+  box-sizing: content-box;
+
+  background-color: var(--secondary);
+}
+
+#cover {
+  height: 100%;
 }
 
 .tracks-container {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  min-height: 0;
+  gap: 0.5em;
+}
+
+.tracks-header {
+  display: flex;
+  gap: 1em;
+}
+
+.tracks-container>:nth-child(2) {
+  padding: 0.5em;
+  background-color: var(--secondary);
 }
 </style>
