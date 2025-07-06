@@ -13,15 +13,15 @@ function displayRoute(route?: string): string {
 
 <template>
   <div>
-    <nav>
-      <span @click="() => hiddenSidebar = !hiddenSidebar"><i class="las la-bars"></i></span>
-      <span>{{ displayRoute($router.currentRoute.value.name?.toString()) }}</span>
+    <nav class="navbar">
+      <span id="toggle-sidebar"><i class="las la-bars" @click="() => hiddenSidebar = !hiddenSidebar"></i></span>
+      <span id="current-page">{{ displayRoute($router.currentRoute.value.name?.toString()) }}</span>
     </nav>
     <main>
       <RouterView></RouterView>
     </main>
-    <div class="sidebar" v-if="!hiddenSidebar">
-      <div class="sidebar-content" @click="() => hiddenSidebar = true">
+    <div class="sidebar" v-if="!hiddenSidebar" @click="() => hiddenSidebar = true">
+      <div class="sidebar-content">
         <RouterLink to="/">
           <span><i class="las la-home"></i></span>
           <span>Home</span>
@@ -51,11 +51,36 @@ function displayRoute(route?: string): string {
 </template>
 
 <style scoped>
-nav {
+.navbar {
   height: 5vh;
+  min-height: 2em;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+
+  align-items: center;
 
   border-bottom: 1px solid var(--border);
   background-color: var(--secondary);
+}
+
+#toggle-sidebar {
+  margin-left: 0.5em;
+  grid-column: 1;
+}
+
+#toggle-sidebar>i {
+  font-size: 1.5em;
+}
+
+
+#toggle-sidebar>i:hover {
+  cursor: pointer;
+}
+
+
+#current-page {
+  grid-column: 2;
 }
 
 main {
@@ -82,6 +107,21 @@ main {
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  gap: 1em;
+}
+
+.sidebar-content>* {
+  height: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: var(--primary);
+}
+
+.sidebar-content>*>* {
+  font-size: 1.3em;
 }
 
 .sidebar-back {
