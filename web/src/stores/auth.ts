@@ -1,4 +1,4 @@
-import ky from "ky";
+import ky, { HTTPError } from "ky";
 import { defineStore } from "pinia";
 import { computed, ref, type Ref } from "vue";
 
@@ -26,9 +26,14 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function refresh() {
-    const url = import.meta.env.VITE_APP_BACKEND_URL
-    const res = await ky.post(`${url}/refresh`, { credentials: 'include' }).json<{ access_token: string, expires_in: number }>()
-    setToken(res.access_token)
+    try {
+      const url = import.meta.env.VITE_APP_BACKEND_URL
+      const res = await ky.post(`${url}/refresh`, { credentials: 'include' }).json<{ access_token: string, expires_in: number }>()
+      setToken(res.access_token)
+    } catch (error) {
+      if (error instanceof HTTPError)
+        console.error(`HTTP Error: ${error.response.status} - ${error.response.statusText}`)
+    }
   }
 
   async function getAccessToken(state: string) {
