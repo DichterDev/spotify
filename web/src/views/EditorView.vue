@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getPlaylists, searchPlaylists } from '@/scripts/util';
+import { getPlaylists, likedSongs, searchPlaylists } from '@/scripts/util';
 import type { SimplifiedPlaylist } from '@/types/spotify';
 import { computed, onBeforeMount, ref } from 'vue';
 
@@ -11,12 +11,11 @@ import { useRouter } from 'vue-router';
 const editor = useEditorStore()
 const router = useRouter()
 
-const playlists = ref<SimplifiedPlaylist[]>([])
+const playlists = ref<SimplifiedPlaylist[]>([likedSongs])
 const visible = computed<SimplifiedPlaylist[]>(() => searchPlaylists(search.value, playlists.value))
 const search = ref('')
 
 function handleSearch(query: string) {
-  console.log(query)
   search.value = query
 }
 
@@ -26,7 +25,8 @@ function clickPlaylist(playlist: SimplifiedPlaylist) {
 }
 
 onBeforeMount(async () => {
-  playlists.value = await getPlaylists()
+  const res = await getPlaylists()
+  playlists.value = playlists.value.concat(res)
 })
 
 </script>

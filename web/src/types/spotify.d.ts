@@ -97,11 +97,6 @@ interface SimplifiedPlaylist {
   uri: string
 }
 
-interface SavedTrack {
-  added_at: string
-  track: Track
-}
-
 interface Playlist extends SimplifiedPlaylist {
   tracks: Response<PlaylistTrack>
 }
@@ -129,9 +124,12 @@ interface Track {
   is_local: boolean
 }
 
-interface PlaylistTrack {
+interface SavedTrack {
   added_at: string
+  track: Track
+}
+
+interface PlaylistTrack extends SavedTrack {
   added_by: Owner
   is_local: boolean
-  track: Track
 }

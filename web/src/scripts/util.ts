@@ -1,6 +1,25 @@
-import type { Response, CurrentUser, SimplifiedPlaylist, Playlist, Track, PlaylistTrack } from '@/types/spotify'
+import type { Response, CurrentUser, SimplifiedPlaylist, Playlist, Track, PlaylistTrack, SavedTrack } from '@/types/spotify'
 import { spotify } from './api'
 import { useEditorStore } from '@/stores/editor'
+
+export const likedSongs: SimplifiedPlaylist = {
+  collaborative: false,
+  description: "",
+  external_urls: { spotify: '' },
+  href: "",
+  id: "liked",
+  images: [{ url: 'https://misc.scdn.co/liked-songs/liked-songs-300.jpg', height: 300, width: 300 }],
+  name: "Liked Songs",
+  owner: { external_urls: { spotify: '' }, href: '', id: '', display_name: '', uri: '', type: '' },
+  public: false,
+  snapshot_id: "",
+  tracks: {
+    href: "",
+    total: 0
+  },
+  type: "playlist",
+  uri: ""
+};
 
 export async function getProfile(): Promise<CurrentUser> {
   const res = await spotify.get<CurrentUser>("me")
@@ -8,14 +27,16 @@ export async function getProfile(): Promise<CurrentUser> {
 }
 
 async function getAllTracks(url: string, callback: (tracks: Track[]) => void) {
-  const res = await spotify.get(url, { prefixUrl: '' }).json<Response<PlaylistTrack>>()
+  const res = await spotify.get(url, { prefixUrl: '' }).json<Response<SavedTrack>>()
   const tracks = res.items.map(({ track }) => track).filter(t => t.is_local !== true)
   callback(tracks)
   if (res.next) getAllTracks(res.next, callback)
 }
 
 export async function getTracks(id: string, callback?: (tracks: Track[]) => void, limit: number = 50): Promise<Track[]> {
-  const res = await spotify.get(`playlists/${id}/tracks?limit=${limit}`).json<Response<PlaylistTrack>>()
+  let url = `playlists/${id}/tracks?limit=${limit}`
+  if (id === 'liked') url = `me/tracks?limit=${limit}`
+  const res = await spotify.get(url).json<Response<SavedTrack>>()
   if (callback) {
     getAllTracks(res.next, callback)
   }

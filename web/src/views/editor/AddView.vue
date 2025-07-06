@@ -4,12 +4,12 @@ import Search from '@/components/Search.vue';
 import Playlists from '@/components/Playlists.vue';
 import { computed, onBeforeMount, ref } from 'vue';
 import type { SimplifiedPlaylist } from '@/types/spotify';
-import { getPlaylistID, getPlaylists, searchPlaylists } from '@/scripts/util';
+import { getPlaylistID, getPlaylists, likedSongs, searchPlaylists } from '@/scripts/util';
 import { useEditorStore } from '@/stores/editor';
 import { useRouter } from 'vue-router';
 
-const playlists = ref<SimplifiedPlaylist[]>([])
-const visible = computed<SimplifiedPlaylist[]>(() => searchPlaylists(search.value, playlists.value))
+const playlists = ref<SimplifiedPlaylist[]>([likedSongs])
+const visible = computed<SimplifiedPlaylist[]>(() => searchPlaylists(search.value, playlists.value).filter(p => p.id !== editor.target?.id))
 const search = ref('')
 
 const editor = useEditorStore()
@@ -31,7 +31,8 @@ function clickPlaylist(playlist: SimplifiedPlaylist) {
 }
 
 onBeforeMount(async () => {
-  playlists.value = await getPlaylists()
+  const res = await getPlaylists()
+  playlists.value = playlists.value.concat(res)
 })
 
 </script>

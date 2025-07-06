@@ -11,7 +11,7 @@ const props = defineProps<{
     <img class="playlist-cover" :src="props.playlist?.images[0].url" />
     <div class="playlist-info">
       <div class="playlist-name">{{ props.playlist?.name }}</div>
-      <div class="playlist-extra">
+      <div class="playlist-extra" v-if="playlist.tracks.total">
         <span>{{ props.playlist.tracks.total }} Songs</span>
         <span> - </span>
         <span>{{ props.playlist.owner.display_name }}</span>
