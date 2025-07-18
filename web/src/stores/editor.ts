@@ -29,6 +29,7 @@ export const useEditorStore = defineStore('editor', () => {
     from.value = undefined
     added.value = []
     removed.value = []
+    targetTrackIds.value = []
   }
 
   return {

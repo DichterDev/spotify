@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+import EditorDelta from './components/EditorDelta.vue';
+
 const hiddenSidebar = ref(true)
 
 function displayRoute(route?: string): string {
@@ -19,6 +21,7 @@ function displayRoute(route?: string): string {
     </nav>
     <main>
       <RouterView></RouterView>
+      <EditorDelta v-if="displayRoute($router.currentRoute.value.name?.toString()) === 'Editor'"></EditorDelta>
     </main>
     <div class="sidebar" v-if="!hiddenSidebar" @click="() => hiddenSidebar = true">
       <div class="sidebar-content">
@@ -85,6 +88,11 @@ function displayRoute(route?: string): string {
 
 main {
   height: 95vh;
+  display: flex;
+}
+
+main>* {
+  flex: 1;
 }
 
 .sidebar {
