@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Track } from '@/types/spotify';
-import { ref, type Ref } from 'vue';
+import { onBeforeMount, ref, type Ref } from 'vue';
 
 const props = defineProps<{
   track: Track
@@ -10,7 +10,10 @@ const props = defineProps<{
 
 <template>
   <div class="track">
-    <img class="track-cover" :src="props.track.album.images[0].url" />
+    <img class="track-cover" :src="props.track.album.images[0].url" v-if="props.track.album.images[0]" />
+    <div class="track-cover" v-else>
+      <i class="las la-file-audio"></i>
+    </div>
     <div class="track-info">
       <span class="track-name">{{ props.track.name }}</span>
       <div class="track-artists">
@@ -27,6 +30,7 @@ const props = defineProps<{
 .track {
   height: 3em;
   display: flex;
+  flex-shrink: 0;
   flex-direction: row;
   gap: 0.5em;
 
@@ -46,6 +50,11 @@ const props = defineProps<{
   height: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 0.25em;
+}
+
+.track-cover>i {
+  height: 100%;
+  font-size: 2em;
 }
 
 .track-name,
