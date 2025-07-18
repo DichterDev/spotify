@@ -1,6 +1,7 @@
 import type { Response, CurrentUser, SimplifiedPlaylist, Playlist, Track, PlaylistTrack, SavedTrack } from '@/types/spotify'
 import { spotify } from './api'
 import { useEditorStore } from '@/stores/editor'
+import router from '@/router';
 
 export const likedSongs: SimplifiedPlaylist = {
   collaborative: false,
@@ -43,7 +44,8 @@ export async function getTracks(id: string, callback?: (tracks: Track[]) => void
   return res.items.map(({ track }) => track).filter(t => t.is_local !== true)
 }
 
-export async function getPlaylist(id: string): Promise<Playlist> {
+export async function getPlaylist(id: string): Promise<SimplifiedPlaylist> {
+  if (id === "liked") return likedSongs
   const res = await spotify.get(`playlists/${id}`).json<Playlist>()
   return res
 }
@@ -100,6 +102,7 @@ export async function submit() {
   }
 
   editor.reset()
+  router.push(`/editor/${editor.target.id}`)
 }
 
 export function getPlaylistID(url: string): string {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getPlaylist, getTracks, searchTracks } from '@/scripts/util';
 import { useEditorStore } from '@/stores/editor';
-import type { Playlist, Track } from '@/types/spotify';
+import type { Playlist, SimplifiedPlaylist, Track } from '@/types/spotify';
 import { computed, onBeforeMount, ref } from 'vue';
 
 import Search from '@/components/Search.vue';
@@ -10,7 +10,7 @@ import Tracks from '@/components/Tracks.vue';
 const editor = useEditorStore()
 
 
-const playlist = ref<Playlist>()
+const playlist = ref<SimplifiedPlaylist>()
 const tracks = ref<Track[]>([])
 const visible = computed(() => searchTracks(search.value, tracks.value.filter(t => editor.targetTrackIds.findIndex((id) => id === t.id) === -1)))
 const search = ref('')

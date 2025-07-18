@@ -44,7 +44,7 @@ onBeforeMount(async () => {
         <Search @change="handleSearch"></Search>
         <button>Sort</button>
       </div>
-      <Tracks :tracks="visible" v-if="visible.length"></Tracks>
+      <Tracks :tracks="visible" v-if="visible.length" @track:click="(t: Track) => editor.toggleRemoved(t)"></Tracks>
     </div>
   </div>
 </template>
