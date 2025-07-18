@@ -12,7 +12,7 @@ const editor = useEditorStore()
 
 const playlist = ref<Playlist>()
 const tracks = ref<Track[]>([])
-const visible = computed(() => searchTracks(search.value, tracks.value))
+const visible = computed(() => searchTracks(search.value, tracks.value.filter(t => editor.targetTrackIds.findIndex((id) => id === t.id) === -1)))
 const search = ref('')
 
 function callbackTracks(ts: Track[]) {

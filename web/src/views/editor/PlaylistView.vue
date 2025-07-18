@@ -16,6 +16,7 @@ const visible = computed(() => searchTracks(search.value, tracks.value))
 
 function callbackTracks(ts: Track[]) {
   tracks.value = tracks.value.concat(ts)
+  editor.targetTrackIds = editor.targetTrackIds.concat(ts.map(t => t.id))
 }
 
 function handleSearch(query: string) {
@@ -26,6 +27,7 @@ onBeforeMount(async () => {
   if (!editor.target) useRouter().push('/editor')
   const id = editor.target!.id
   tracks.value = await getTracks(id, callbackTracks)
+  editor.targetTrackIds = tracks.value.map(t => t.id)
 })
 
 </script>

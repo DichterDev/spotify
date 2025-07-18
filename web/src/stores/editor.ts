@@ -8,6 +8,8 @@ export const useEditorStore = defineStore('editor', () => {
   const added = ref<Track[]>([])
   const removed = ref<Track[]>([])
 
+  const targetTrackIds = ref<string[]>([])
+
   function toggle(ts: Track[], t: Track): Track[] {
     const i = ts.findIndex(({ id }) => id === t.id)
     if (i === -1) ts.push(t)
@@ -34,6 +36,7 @@ export const useEditorStore = defineStore('editor', () => {
     from,
     added,
     removed,
+    targetTrackIds,
     toggleAdded,
     toggleRemoved,
     reset
